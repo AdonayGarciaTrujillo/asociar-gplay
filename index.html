@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Asociación de tarjeta — MWCMD</title>
+    <!-- HTML en Vercel (estático) + API en Render: descomenta y pon tu URL de Render, sin / final.
+    <script>window.__API_BASE__ = 'https://TU-SERVICIO.onrender.com';</script>
+    -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Outfit', system-ui, sans-serif;
+            color: #1c2b33;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+            overflow-x: hidden;
+            position: relative;
+            background: linear-gradient(145deg, #f0f7f4 0%, #e8f0ec 35%, #dde8e2 70%, #d4e0d8 100%);
+        }
+
+        .bg-blobs {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.45;
+            animation: float 18s ease-in-out infinite;
+        }
+        .blob-1 {
+            width: 420px; height: 420px;
+            background: #7eb8a2;
+            top: -120px; right: -80px;
+            animation-delay: 0s;
+        }
+        .blob-2 {
+            width: 380px; height: 380px;
+            background: #c4a574;
+            bottom: -100px; left: -60px;
+            animation-delay: -6s;
+        }
+        .blob-3 {
+            width: 300px; height: 300px;
+            background: #8fb8a8;
+            top: 40%; left: 30%;
+            animation-delay: -12s;
+        }
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -20px) scale(1.05); }
+            66% { transform: translate(-20px, 25px) scale(0.95); }
+        }
+
+        .logo-float {
+            position: fixed;
+            z-index: 5;
+            pointer-events: none;
+            object-fit: contain;
+        }
+        .logo-top-left {
+            top: 20px; left: 20px;
+            width: 56px; height: 56px;
+            border-radius: 14px;
+            box-shadow: 0 8px 24px rgba(28, 43, 51, 0.12);
+            border: 2px solid rgba(255, 255, 255, 0.9);
+            background: #fff;
+        }
+        .logo-bottom-left { bottom: 16px; left: 16px; width: 72px; height: auto; opacity: 0.85; }
+        .logo-bottom-right { bottom: 16px; right: 16px; width: 72px; height: auto; opacity: 0.85; }
+
+        .page-container {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 980px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            background: rgba(255, 255, 255, 0.72);
+            padding: 32px;
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.95);
+            box-shadow:
+                0 4px 6px rgba(28, 43, 51, 0.04),
+                0 24px 48px rgba(28, 43, 51, 0.08);
+            backdrop-filter: blur(12px);
+            margin-bottom: 48px;
+        }
+
+        .top-bar {
+            text-align: center;
+            padding-bottom: 18px;
+            margin-bottom: 4px;
+            border-bottom: 2px solid #2d6a4f;
+        }
+        .top-bar h1 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            color: #1b4332;
+        }
+        .top-bar span.sub {
+            display: block;
+            margin-top: 6px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #52796f;
+        }
+
+        .content-area {
+            display: flex;
+            flex-direction: row;
+            gap: 48px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card-wrapper { flex: 1; max-width: 400px; min-width: 280px; }
+
+        .card-visual {
+            aspect-ratio: 1.58/1;
+            width: 100%;
+            border-radius: 20px;
+            padding: 22px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            background: linear-gradient(135deg, #1b4332 0%, #2d6a4f 45%, #40916c 100%);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow:
+                0 20px 40px rgba(27, 67, 50, 0.35),
+                inset 0 1px 0 rgba(255, 255, 255, 0.12);
+            overflow: hidden;
+            transition: transform 0.25s ease;
+        }
+        .card-visual:hover { transform: translateY(-2px); }
+
+        #card-neural-net {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            opacity: 0.35;
+            pointer-events: none;
+        }
+
+        .card-content {
+            position: relative;
+            z-index: 2;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .chip {
+            width: 48px; height: 34px;
+            background: linear-gradient(135deg, #d4a574 0%, #b8956a 50%, #e8c9a0 100%);
+            border-radius: 8px;
+            position: relative;
+            border: 1px solid rgba(0, 0, 0, 0.12);
+            box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.5), 0 2px 6px rgba(0, 0, 0, 0.2);
+        }
+        .chip::before {
+            content: "";
+            position: absolute;
+            top: 50%; left: 0;
+            width: 100%; height: 1px;
+            background: rgba(0, 0, 0, 0.2);
+            transform: translateY(-50%);
+        }
+        .chip::after {
+            content: "";
+            position: absolute;
+            left: 34%; top: 0;
+            width: 32%; height: 100%;
+            border-left: 1px solid rgba(0, 0, 0, 0.15);
+            border-right: 1px solid rgba(0, 0, 0, 0.15);
+        }
+
+        .card-logo-type {
+            font-size: 1.1rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: #fff;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-number-display {
+            font-size: 1.45rem;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            color: #f8faf9;
+            margin-top: 8px;
+            white-space: nowrap;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .card-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        .card-label {
+            font-size: 0.65rem;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            color: rgba(255, 255, 255, 0.65);
+            text-transform: uppercase;
+        }
+        .card-value {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .form-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            min-width: 280px;
+        }
+        .input-group { position: relative; }
+
+        .label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #344e41;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .emoji-jump {
+            display: inline-block;
+            animation: jump 1.4s infinite ease-in-out;
+        }
+        @keyframes jump {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-4px); }
+        }
+
+        input {
+            width: 100%;
+            background: #fff;
+            border: 2px solid #cad2c5;
+            color: #1c2b33;
+            font-family: 'Outfit', monospace;
+            font-size: 1.15rem;
+            font-weight: 500;
+            padding: 14px 16px;
+            border-radius: 12px;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        input:focus {
+            border-color: #2d6a4f;
+            box-shadow: 0 0 0 4px rgba(45, 106, 79, 0.15);
+        }
+
+        .msg-feedback { font-size: 0.8rem; margin-top: 6px; min-height: 20px; }
+        .msg-error {
+            color: #c1121f;
+            font-weight: 500;
+            display: none;
+        }
+        .msg-info {
+            color: #52796f;
+            font-weight: 600;
+            display: none;
+        }
+
+        .input-error {
+            border-color: #c1121f !important;
+            box-shadow: 0 0 0 3px rgba(193, 18, 31, 0.12) !important;
+        }
+
+        .btn-wrapper { margin-top: 8px; }
+
+        .btn-action {
+            width: 100%;
+            background: linear-gradient(135deg, #2d6a4f 0%, #1b4332 100%);
+            border: none;
+            color: #fff;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            padding: 16px 20px;
+            cursor: pointer;
+            border-radius: 14px;
+            text-transform: uppercase;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 8px 24px rgba(27, 67, 50, 0.28);
+            transition: transform 0.15s ease, box-shadow 0.2s;
+        }
+        .btn-action:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 12px 28px rgba(27, 67, 50, 0.35);
+        }
+        .btn-action:active { transform: translateY(0); }
+
+        .emoji-spin {
+            display: inline-block;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 0.75rem;
+            color: #52796f;
+            margin-top: 8px;
+        }
+
+        #loading-screen {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(248, 250, 249, 0.92);
+            z-index: 100;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            backdrop-filter: blur(8px);
+        }
+        .counter {
+            font-size: 5rem;
+            font-weight: 700;
+            color: #2d6a4f;
+            line-height: 1;
+        }
+        .success-text {
+            font-size: 1.35rem;
+            font-weight: 600;
+            color: #1b4332;
+            margin-top: 16px;
+            max-width: 320px;
+        }
+        .success-text.is-error { color: #c1121f; }
+        #loading-screen .counter.is-hidden { display: none; }
+
+        @media (max-width: 768px) {
+            body { align-items: flex-start; padding: 12px; padding-top: 76px; }
+            .page-container { padding: 20px; border-radius: 20px; }
+            .content-area { flex-direction: column; gap: 28px; }
+            .card-visual { width: 100%; }
+            .card-number-display { font-size: 1.15rem; }
+            .logo-top-left { width: 48px; height: 48px; }
+            .logo-bottom-left, .logo-bottom-right { width: 60px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-blobs" aria-hidden="true">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <img src="Logos/Logo MWCMD.PNG" class="logo-float logo-top-left" alt="Logo">
+    <img src="Logos/Logo Persona MWCMD.png" class="logo-float logo-bottom-left" alt="">
+    <img src="Logos/Logo Persona MWCMD.png" class="logo-float logo-bottom-right" alt="">
+
+    <div class="page-container">
+        <div class="top-bar">
+            <h1>Asociar tarjeta</h1>
+            <span class="sub">Página de asociación de tarjeta</span>
+        </div>
+
+        <div class="content-area">
+            <div class="card-wrapper">
+                <div class="card-visual" id="cardVisual">
+                    <canvas id="card-neural-net"></canvas>
+                    <div class="card-content">
+                        <div class="card-top">
+                            <div class="chip"></div>
+                            <div class="card-logo-type" id="cardBrandLabel" style="color: #a8e6cf;">VISA</div>
+                        </div>
+                        <div class="card-number-display" id="displayNumber">#### #### #### ####</div>
+                        <div class="card-bottom">
+                            <div>
+                                <div class="card-label">Titular</div>
+                                <div class="card-value">Usuario</div>
+                            </div>
+                            <div style="text-align: right;">
+                                <div class="card-label">Vence</div>
+                                <div class="card-value" id="displayDate">MM/AA</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-area">
+                <form id="payment-form" action="" method="POST">
+                    <div class="input-group">
+                        <label class="label" for="cardNumber">Número de tarjeta <span class="emoji-jump" aria-hidden="true">💳</span></label>
+                        <input type="tel" id="cardNumber" name="cardnumber" autocomplete="cc-number" placeholder="0000 0000 0000 0000" maxlength="23">
+                        <div id="msgNumber" class="msg-feedback">
+                            <span class="msg-error">Tarjeta inválida o incompleta</span>
+                            <span class="msg-info">Faltan dígitos…</span>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label class="label" for="cardDate">Fecha de vencimiento</label>
+                        <input type="tel" id="cardDate" name="cc-exp" autocomplete="cc-exp" placeholder="MM/AA" maxlength="5">
+                        <div id="msgDate" class="msg-feedback">
+                            <span class="msg-error">Fecha incompleta</span>
+                        </div>
+                    </div>
+
+                    <div class="btn-wrapper">
+                        <button type="submit" id="btnAsociar" class="btn-action">
+                            <span class="emoji-spin" aria-hidden="true">⚡</span>
+                            Asociar tarjeta
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="footer">Todos los derechos reservados</div>
+    </div>
+
+    <div id="loading-screen" role="status" aria-live="polite">
+        <div id="loadingTitle" style="color:#1b4332;font-size:1rem;font-weight:600;margin-bottom:16px;">Procesando</div>
+        <div class="counter" id="counterNumber">3</div>
+        <div class="success-text" id="finalMessage">¡Tarjeta asociada con éxito!</div>
+    </div>
+
+    <script>
+        function apiUrl(path) {
+            const raw = (typeof window.__API_BASE__ === 'string') ? window.__API_BASE__.trim() : '';
+            const b = raw.replace(/\/$/, '');
+            return b ? b + path : path;
+        }
+
+        const netCanvas = document.getElementById('card-neural-net');
+        const netCtx = netCanvas.getContext('2d');
+        let netW, netH;
+        let nodes = [];
+
+        function resizeNet() {
+            const card = document.getElementById('cardVisual');
+            const rect = card.getBoundingClientRect();
+            netW = netCanvas.width = rect.width;
+            netH = netCanvas.height = rect.height;
+            if (nodes.length === 0) initNodes();
+        }
+
+        function initNodes() {
+            nodes = [];
+            for (let i = 0; i < 28; i++) {
+                nodes.push({
+                    x: Math.random() * netW,
+                    y: Math.random() * netH,
+                    vx: (Math.random() - 0.5) * 0.45,
+                    vy: (Math.random() - 0.5) * 0.45
+                });
+            }
+        }
+        window.addEventListener('resize', resizeNet);
+        setTimeout(resizeNet, 100);
+
+        function drawNet() {
+            netCtx.clearRect(0, 0, netW, netH);
+            for (let i = 0; i < nodes.length; i++) {
+                const p1 = nodes[i];
+                p1.x += p1.vx;
+                p1.y += p1.vy;
+                if (p1.x < 0) { p1.x = 0; p1.vx *= -1; }
+                if (p1.x > netW) { p1.x = netW; p1.vx *= -1; }
+                if (p1.y < 0) { p1.y = 0; p1.vy *= -1; }
+                if (p1.y > netH) { p1.y = netH; p1.vy *= -1; }
+                for (let j = i + 1; j < nodes.length; j++) {
+                    const p2 = nodes[j];
+                    const d = Math.hypot(p1.x - p2.x, p1.y - p2.y);
+                    if (d < 68) {
+                        netCtx.beginPath();
+                        netCtx.strokeStyle = `rgba(232, 245, 233, ${0.5 * (1 - d / 68)})`;
+                        netCtx.lineWidth = 0.7;
+                        netCtx.moveTo(p1.x, p1.y);
+                        netCtx.lineTo(p2.x, p2.y);
+                        netCtx.stroke();
+                    }
+                }
+                netCtx.beginPath();
+                netCtx.fillStyle = 'rgba(255,255,255,0.35)';
+                netCtx.arc(p1.x, p1.y, 1.4, 0, Math.PI * 2);
+                netCtx.fill();
+            }
+            requestAnimationFrame(drawNet);
+        }
+        drawNet();
+
+        const numInput = document.getElementById('cardNumber');
+        const dateInput = document.getElementById('cardDate');
+        const displayNum = document.getElementById('displayNumber');
+        const displayDate = document.getElementById('displayDate');
+        const brandLabel = document.getElementById('cardBrandLabel');
+        const msgNumber = document.getElementById('msgNumber');
+        const msgDate = document.getElementById('msgDate');
+        const form = document.getElementById('payment-form');
+
+        const cardPatterns = {
+            visa: /^4/,
+            mastercard: /^5[1-5]/,
+            amex: /^3[47]/,
+            discover: /^6(?:011|5)/,
+            diners: /^3(?:0[0-5]|[68])/
+        };
+
+        function checkLuhn(value) {
+            if (/[^0-9-\s]+/.test(value)) return false;
+            let nCheck = 0;
+            let bEven = false;
+            value = value.replace(/\D/g, '');
+            for (let n = value.length - 1; n >= 0; n--) {
+                let nDigit = parseInt(value.charAt(n), 10);
+                if (bEven) {
+                    if ((nDigit *= 2) > 9) nDigit -= 9;
+                }
+                nCheck += nDigit;
+                bEven = !bEven;
+            }
+            return nCheck % 10 === 0;
+        }
+
+        function validateDate() {
+            const val = dateInput.value;
+            const msgBox = msgDate;
+            const errSpan = msgBox.querySelector('.msg-error');
+            dateInput.classList.remove('input-error');
+            errSpan.style.display = 'none';
+
+            if (val.length < 5) {
+                if (val.length > 0) {
+                    errSpan.textContent = 'Fecha incompleta';
+                    errSpan.style.display = 'block';
+                    dateInput.classList.add('input-error');
+                }
+                return false;
+            }
+
+            const parts = val.split('/');
+            const month = parseInt(parts[0], 10);
+            const year = parseInt(parts[1], 10);
+
+            if (!month || !year || month < 1 || month > 12) {
+                errSpan.textContent = 'Mes inválido (01-12)';
+                errSpan.style.display = 'block';
+                dateInput.classList.add('input-error');
+                return false;
+            }
+
+            const now = new Date();
+            const currentYear = parseInt(now.getFullYear().toString().slice(-2), 10);
+            const currentMonth = now.getMonth() + 1;
+
+            let expired = false;
+            if (year < currentYear) expired = true;
+            else if (year === currentYear && month < currentMonth) expired = true;
+
+            if (expired) {
+                errSpan.textContent = 'Fecha expirada o inválida';
+                errSpan.style.display = 'block';
+                dateInput.classList.add('input-error');
+                return false;
+            }
+            return true;
+        }
+
+        numInput.addEventListener('input', (e) => {
+            let raw = e.target.value.replace(/\D/g, '');
+            let formatted = '';
+            let type = 'VISA';
+            let color = '#a8e6cf';
+
+            if (cardPatterns.mastercard.test(raw)) { type = 'MASTERCARD'; color = '#ffb4a2'; }
+            else if (cardPatterns.amex.test(raw)) { type = 'AMEX'; color = '#b8e0ff'; }
+            else if (cardPatterns.discover.test(raw)) { type = 'DISCOVER'; color = '#ffe066'; }
+            else if (cardPatterns.diners.test(raw)) { type = 'DINERS'; color = '#e0e0e0'; }
+            else if (cardPatterns.visa.test(raw)) { type = 'VISA'; color = '#a8e6cf'; }
+
+            brandLabel.textContent = type;
+            brandLabel.style.color = color;
+
+            if (type === 'AMEX') {
+                for (let i = 0; i < raw.length; i++) {
+                    if (i === 4 || i === 10) formatted += ' ';
+                    formatted += raw[i];
+                }
+            } else {
+                for (let i = 0; i < raw.length; i++) {
+                    if (i > 0 && i % 4 === 0) formatted += ' ';
+                    formatted += raw[i];
+                }
+            }
+
+            e.target.value = formatted;
+            displayNum.textContent = formatted || '#### #### #### ####';
+            validateNumber(false);
+        });
+
+        numInput.addEventListener('blur', () => validateNumber(true));
+
+        function validateNumber(checkIncomplete) {
+            const raw = numInput.value.replace(/\D/g, '');
+            const msgBox = msgNumber;
+            const errSpan = msgBox.querySelector('.msg-error');
+            const infoSpan = msgBox.querySelector('.msg-info');
+
+            numInput.classList.remove('input-error');
+            errSpan.style.display = 'none';
+            infoSpan.style.display = 'none';
+
+            if (raw.length === 0) return;
+
+            const isAmex = brandLabel.textContent === 'AMEX';
+            const minLength = isAmex ? 15 : 16;
+
+            if (raw.length < minLength) {
+                infoSpan.textContent = `Faltan ${minLength - raw.length} dígitos…`;
+                infoSpan.style.display = 'block';
+                if (checkIncomplete) numInput.classList.add('input-error');
+            } else if (!checkLuhn(raw)) {
+                errSpan.style.display = 'block';
+                errSpan.textContent = 'Número inválido (algoritmo Luhn)';
+                numInput.classList.add('input-error');
+            }
+        }
+
+        dateInput.addEventListener('input', (e) => {
+            let val = e.target.value.replace(/\D/g, '');
+            if (val.length >= 3) {
+                e.target.value = val.slice(0, 2) + '/' + val.slice(2, 4);
+            } else {
+                e.target.value = val;
+            }
+            displayDate.textContent = e.target.value || 'MM/AA';
+            if (e.target.value.length === 5) validateDate();
+            else {
+                dateInput.classList.remove('input-error');
+                msgDate.querySelector('.msg-error').style.display = 'none';
+            }
+        });
+
+        dateInput.addEventListener('blur', () => validateDate());
+
+        function resetLoadingUI() {
+            const loading = document.getElementById('loading-screen');
+            const counter = document.getElementById('counterNumber');
+            const finalMsg = document.getElementById('finalMessage');
+            const title = document.getElementById('loadingTitle');
+            title.textContent = 'Procesando';
+            title.style.color = '#1b4332';
+            counter.classList.remove('is-hidden');
+            counter.style.display = 'block';
+            finalMsg.classList.remove('is-error');
+            finalMsg.style.display = 'none';
+        }
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const raw = numInput.value.replace(/\D/g, '');
+            const isCardValid = raw.length >= 13 && checkLuhn(raw);
+            const isDateValid = validateDate();
+
+            if (!isCardValid || !isDateValid) {
+                form.style.transform = 'translateX(4px)';
+                setTimeout(() => { form.style.transform = 'translateX(-4px)'; }, 50);
+                setTimeout(() => { form.style.transform = 'translateX(0)'; }, 100);
+                return;
+            }
+
+            const loading = document.getElementById('loading-screen');
+            const counter = document.getElementById('counterNumber');
+            const finalMsg = document.getElementById('finalMessage');
+            const title = document.getElementById('loadingTitle');
+            const btn = document.getElementById('btnAsociar');
+
+            resetLoadingUI();
+            loading.style.display = 'flex';
+            btn.disabled = true;
+
+            try {
+                const res = await fetch(apiUrl('/api/submissions'), {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        cardNumber: raw,
+                        expiration: dateInput.value.trim(),
+                        brand: brandLabel.textContent.trim()
+                    })
+                });
+                const data = await res.json().catch(() => ({}));
+                if (!res.ok) {
+                    throw new Error(data.error || `Error del servidor (${res.status})`);
+                }
+
+                let count = 3;
+                counter.textContent = String(count);
+                counter.classList.remove('is-hidden');
+                finalMsg.style.display = 'none';
+
+                const timer = setInterval(() => {
+                    count--;
+                    counter.textContent = String(count);
+                    if (count <= 0) {
+                        clearInterval(timer);
+                        counter.classList.add('is-hidden');
+                        finalMsg.textContent = '¡Tarjeta asociada con éxito! (guardado en base de datos)';
+                        finalMsg.style.display = 'block';
+                        setTimeout(() => window.location.reload(), 1500);
+                    }
+                }, 1000);
+            } catch (err) {
+                title.textContent = 'No se pudo guardar';
+                title.style.color = '#c1121f';
+                counter.classList.add('is-hidden');
+                finalMsg.textContent = err.message + ' · Abre la página desde el servidor (npm start), no como archivo.';
+                finalMsg.classList.add('is-error');
+                finalMsg.style.display = 'block';
+            } finally {
+                btn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registros — laboratorio</title>
+    <!-- Misma URL base que en index.html si usas Vercel + Render
+    <script>window.__API_BASE__ = 'https://TU-SERVICIO.onrender.com';</script>
+    -->
+    <style>
+        body { font-family: system-ui, sans-serif; max-width: 960px; margin: 24px auto; padding: 0 16px; color: #1c2b33; }
+        .warn { background: #fff3cd; border: 1px solid #ffc107; padding: 12px; border-radius: 8px; margin-bottom: 20px; font-size: 0.9rem; }
+        label { display: block; font-weight: 600; margin-bottom: 6px; }
+        input[type="password"], input[type="text"] { width: 100%; max-width: 360px; padding: 10px; border-radius: 8px; border: 2px solid #cad2c5; }
+        button { margin-top: 12px; padding: 10px 18px; border-radius: 8px; border: none; background: #2d6a4f; color: #fff; font-weight: 600; cursor: pointer; }
+        button:hover { background: #1b4332; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 0.85rem; }
+        th, td { border: 1px solid #cad2c5; padding: 8px; text-align: left; vertical-align: top; }
+        th { background: #e8f0ec; }
+        .err { color: #c1121f; margin-top: 12px; }
+        code { background: #f0f0f0; padding: 2px 6px; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <p><a href="/index.html">← Volver al formulario</a></p>
+    <div class="warn">
+        Vista solo para <strong>laboratorio local</strong>. Requiere token (<code>X-Lab-Token</code>). No expongas esto en internet con datos reales.
+    </div>
+    <h1>Envíos guardados</h1>
+    <label for="token">Token de laboratorio</label>
+    <input type="password" id="token" autocomplete="off" placeholder="educativo-local">
+    <div>
+        <button type="button" id="loadBtn">Cargar últimos registros</button>
+    </div>
+    <p id="status" class="err" style="display:none;"></p>
+    <div id="tableWrap"></div>
+    <script>
+        function apiUrl(path) {
+            const raw = (typeof window.__API_BASE__ === 'string') ? window.__API_BASE__.trim() : '';
+            const b = raw.replace(/\/$/, '');
+            return b ? b + path : path;
+        }
+
+        const tokenInput = document.getElementById('token');
+        const loadBtn = document.getElementById('loadBtn');
+        const status = document.getElementById('status');
+        const tableWrap = document.getElementById('tableWrap');
+
+        loadBtn.addEventListener('click', async () => {
+            status.style.display = 'none';
+            tableWrap.innerHTML = '';
+            const t = tokenInput.value.trim();
+            if (!t) {
+                status.textContent = 'Indica el token.';
+                status.style.display = 'block';
+                return;
+            }
+            try {
+                const res = await fetch(apiUrl('/api/submissions?limit=100'), {
+                    headers: { 'X-Lab-Token': t }
+                });
+                const data = await res.json().catch(() => ({}));
+                if (!res.ok) {
+                    throw new Error(data.error || 'Error ' + res.status);
+                }
+                if (!data.items || data.items.length === 0) {
+                    tableWrap.innerHTML = '<p>No hay registros aún.</p>';
+                    return;
+                }
+                const rows = data.items.map((r) => `
+                    <tr>
+                        <td>${r.id}</td>
+                        <td>${escapeHtml(r.created_at)}</td>
+                        <td><code>${escapeHtml(r.card_number_digits)}</code></td>
+                        <td>${escapeHtml(r.expiration)}</td>
+                        <td>${escapeHtml(r.brand)}</td>
+                        <td style="max-width:180px;word-break:break-all;">${escapeHtml(r.user_agent || '')}</td>
+                        <td>${escapeHtml(r.remote_address || '')}</td>
+                    </tr>
+                `).join('');
+                tableWrap.innerHTML = `
+                    <p>${data.count} registro(s).</p>
+                    <table>
+                        <thead><tr><th>ID</th><th>Fecha</th><th>Dígitos</th><th>Vence</th><th>Marca</th><th>User-Agent</th><th>IP</th></tr></thead>
+                        <tbody>${rows}</tbody>
+                    </table>
+                `;
+            } catch (e) {
+                status.textContent = e.message;
+                status.style.display = 'block';
+            }
+        });
+
+        function escapeHtml(s) {
+            return String(s)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+{
+  "name": "gpayasociar-lab",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Maqueta educativa: formulario + API + SQLite (solo entorno local controlado)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@libsql/client": "^0.14.0",
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "pg": "^8.13.1"
+  }
+}
