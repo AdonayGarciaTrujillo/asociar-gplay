@@ -38,8 +38,15 @@ app.get('/api/submissions', async (req, res) => {
 
 app.use(express.static(__dirname));
 
+function dbModeLog() {
+  const u = process.env.DATABASE_URL || '';
+  if (/^postgres(ql)?:\/\//i.test(u)) return 'PostgreSQL (variable DATABASE_URL)';
+  if (process.env.TURSO_DATABASE_URL || process.env.LIBSQL_URL) return 'Turso / libSQL remoto';
+  return 'Archivo local ./data/laboratorio.db (en Render no persiste sin Postgres)';
+}
+
 app.listen(PORT, () => {
   console.log(`[lab] http://localhost:${PORT}/index.html`);
-  console.log(`[lab] Base: archivo local data/ o Turso si defines TURSO_DATABASE_URL`);
-  console.log(`[lab] Token listados: ${lab.getLabTokenHint()}`);
+  console.log(`[lab] Base de datos: ${dbModeLog()}`);
+  console.log(`[lab] Token listados (LAB_TOKEN): ${lab.getLabTokenHint()}`);
 });

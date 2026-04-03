@@ -15,7 +15,7 @@
 
         body {
             font-family: 'Outfit', system-ui, sans-serif;
-            color: #1c2b33;
+            color: #e8d5a0;
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -23,45 +23,14 @@
             padding: 24px;
             overflow-x: hidden;
             position: relative;
-            background: linear-gradient(145deg, #f0f7f4 0%, #e8f0ec 35%, #dde8e2 70%, #d4e0d8 100%);
-        }
-
-        .bg-blobs {
-            position: fixed;
-            inset: 0;
-            z-index: 0;
-            overflow: hidden;
-            pointer-events: none;
-        }
-        .blob {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(80px);
-            opacity: 0.45;
-            animation: float 18s ease-in-out infinite;
-        }
-        .blob-1 {
-            width: 420px; height: 420px;
-            background: #7eb8a2;
-            top: -120px; right: -80px;
-            animation-delay: 0s;
-        }
-        .blob-2 {
-            width: 380px; height: 380px;
-            background: #c4a574;
-            bottom: -100px; left: -60px;
-            animation-delay: -6s;
-        }
-        .blob-3 {
-            width: 300px; height: 300px;
-            background: #8fb8a8;
-            top: 40%; left: 30%;
-            animation-delay: -12s;
-        }
-        @keyframes float {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            33% { transform: translate(30px, -20px) scale(1.05); }
-            66% { transform: translate(-20px, 25px) scale(0.95); }
+            background-color: #0a0a0c;
+            background-image:
+                linear-gradient(155deg, rgba(8, 12, 18, 0.82) 0%, rgba(6, 10, 14, 0.75) 45%, rgba(10, 8, 16, 0.85) 100%),
+                url('assets/fondo.png');
+            background-size: cover, cover;
+            background-position: center, center top;
+            background-attachment: fixed, fixed;
+            background-repeat: no-repeat, no-repeat;
         }
 
         .logo-float {
@@ -72,11 +41,12 @@
         }
         .logo-top-left {
             top: 20px; left: 20px;
-            width: 56px; height: 56px;
-            border-radius: 14px;
-            box-shadow: 0 8px 24px rgba(28, 43, 51, 0.12);
-            border: 2px solid rgba(255, 255, 255, 0.9);
-            background: #fff;
+            width: 64px; height: 64px;
+            border-radius: 50%;
+            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.45), 0 0 0 2px rgba(212, 175, 55, 0.45);
+            border: 2px solid rgba(212, 175, 55, 0.55);
+            background: #000;
+            object-fit: cover;
         }
         .logo-bottom-left { bottom: 16px; left: 16px; width: 72px; height: auto; opacity: 0.85; }
         .logo-bottom-right { bottom: 16px; right: 16px; width: 72px; height: auto; opacity: 0.85; }
@@ -89,14 +59,16 @@
             display: flex;
             flex-direction: column;
             gap: 24px;
-            background: rgba(255, 255, 255, 0.72);
+            color: #e8d5a0;
+            background: rgba(18, 14, 10, 0.82);
             padding: 32px;
             border-radius: 24px;
-            border: 1px solid rgba(255, 255, 255, 0.95);
+            border: 1px solid rgba(212, 175, 55, 0.35);
             box-shadow:
-                0 4px 6px rgba(28, 43, 51, 0.04),
-                0 24px 48px rgba(28, 43, 51, 0.08);
-            backdrop-filter: blur(12px);
+                0 4px 32px rgba(0, 0, 0, 0.45),
+                0 0 40px rgba(180, 140, 40, 0.08),
+                inset 0 1px 0 rgba(255, 230, 180, 0.06);
+            backdrop-filter: blur(14px);
             margin-bottom: 48px;
         }
 
@@ -104,20 +76,21 @@
             text-align: center;
             padding-bottom: 18px;
             margin-bottom: 4px;
-            border-bottom: 2px solid #2d6a4f;
+            border-bottom: 2px solid rgba(212, 175, 55, 0.45);
         }
         .top-bar h1 {
             font-size: 1.35rem;
             font-weight: 700;
             letter-spacing: 0.02em;
-            color: #1b4332;
+            color: #f5e6bc;
+            text-shadow: 0 0 24px rgba(212, 175, 55, 0.25);
         }
         .top-bar span.sub {
             display: block;
             margin-top: 6px;
             font-size: 0.85rem;
             font-weight: 500;
-            color: #52796f;
+            color: #c9a86c;
         }
 
         .content-area {
@@ -139,11 +112,16 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            background: linear-gradient(135deg, #1b4332 0%, #2d6a4f 45%, #40916c 100%);
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            background-color: #08090c;
+            background-image:
+                linear-gradient(118deg, rgba(0, 0, 0, 0.78) 0%, rgba(18, 22, 28, 0.55) 42%, rgba(0, 0, 0, 0.68) 100%),
+                url('assets/card-cuadro.png');
+            background-size: cover, cover;
+            background-position: center left, 58% center;
+            border: 1px solid rgba(255, 255, 255, 0.22);
             box-shadow:
-                0 20px 40px rgba(27, 67, 50, 0.35),
-                inset 0 1px 0 rgba(255, 255, 255, 0.12);
+                0 20px 48px rgba(0, 0, 0, 0.55),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
             overflow: hidden;
             transition: transform 0.25s ease;
         }
@@ -153,7 +131,7 @@
             position: absolute;
             inset: 0;
             z-index: 1;
-            opacity: 0.35;
+            opacity: 0.18;
             pointer-events: none;
         }
 
@@ -173,11 +151,11 @@
 
         .chip {
             width: 48px; height: 34px;
-            background: linear-gradient(135deg, #d4a574 0%, #b8956a 50%, #e8c9a0 100%);
+            background: linear-gradient(135deg, #d8d4cc 0%, #a8a29e 50%, #e4e0d8 100%);
             border-radius: 8px;
             position: relative;
-            border: 1px solid rgba(0, 0, 0, 0.12);
-            box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.5), 0 2px 6px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(0, 0, 0, 0.15);
+            box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.55), 0 2px 6px rgba(0, 0, 0, 0.25);
         }
         .chip::before {
             content: "";
@@ -202,17 +180,18 @@
             letter-spacing: 0.06em;
             text-transform: uppercase;
             color: #fff;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+            text-shadow: 0 0 12px rgba(0, 0, 0, 0.95), 0 2px 4px rgba(0, 0, 0, 0.85);
         }
 
         .card-number-display {
             font-size: 1.45rem;
             font-weight: 600;
             letter-spacing: 0.12em;
-            color: #f8faf9;
+            color: #f1f5f9;
             margin-top: 8px;
             white-space: nowrap;
             font-variant-numeric: tabular-nums;
+            text-shadow: 0 0 14px rgba(0, 0, 0, 0.95), 0 2px 6px rgba(0, 0, 0, 0.9);
         }
 
         .card-bottom {
@@ -224,13 +203,15 @@
             font-size: 0.65rem;
             font-weight: 600;
             letter-spacing: 0.12em;
-            color: rgba(255, 255, 255, 0.65);
+            color: rgba(226, 232, 240, 0.82);
             text-transform: uppercase;
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.95);
         }
         .card-value {
             font-size: 1rem;
             font-weight: 600;
             color: #fff;
+            text-shadow: 0 0 12px rgba(0, 0, 0, 0.95), 0 1px 3px rgba(0, 0, 0, 0.85);
         }
 
         .form-area {
@@ -245,7 +226,7 @@
         .label {
             font-size: 0.9rem;
             font-weight: 600;
-            color: #344e41;
+            color: #e8d18a;
             margin-bottom: 8px;
             display: flex;
             align-items: center;
@@ -263,9 +244,9 @@
 
         input {
             width: 100%;
-            background: #fff;
-            border: 2px solid #cad2c5;
-            color: #1c2b33;
+            background: rgba(8, 7, 5, 0.65);
+            border: 2px solid rgba(201, 168, 80, 0.4);
+            color: #f5ecd4;
             font-family: 'Outfit', monospace;
             font-size: 1.15rem;
             font-weight: 500;
@@ -274,9 +255,12 @@
             outline: none;
             transition: border-color 0.2s, box-shadow 0.2s;
         }
+        input::placeholder {
+            color: rgba(232, 213, 160, 0.4);
+        }
         input:focus {
-            border-color: #2d6a4f;
-            box-shadow: 0 0 0 4px rgba(45, 106, 79, 0.15);
+            border-color: rgba(212, 175, 55, 0.75);
+            box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.15);
         }
 
         .msg-feedback { font-size: 0.8rem; margin-top: 6px; min-height: 20px; }
@@ -286,7 +270,7 @@
             display: none;
         }
         .msg-info {
-            color: #52796f;
+            color: #c9a86c;
             font-weight: 600;
             display: none;
         }
@@ -296,17 +280,17 @@
             box-shadow: 0 0 0 3px rgba(193, 18, 31, 0.12) !important;
         }
 
-        .btn-wrapper { margin-top: 8px; }
+        .btn-wrapper { margin-top: 8px; display: flex; flex-direction: column; gap: 12px; }
 
         .btn-action {
             width: 100%;
-            background: linear-gradient(135deg, #2d6a4f 0%, #1b4332 100%);
-            border: none;
-            color: #fff;
+            background: linear-gradient(135deg, #6b5418 0%, #9a7a24 35%, #c9a227 70%, #d4af37 100%);
+            border: 1px solid rgba(255, 236, 180, 0.35);
+            color: #1a1408;
             font-family: 'Outfit', sans-serif;
             font-size: 1rem;
-            font-weight: 600;
-            letter-spacing: 0.04em;
+            font-weight: 700;
+            letter-spacing: 0.05em;
             padding: 16px 20px;
             cursor: pointer;
             border-radius: 14px;
@@ -315,14 +299,33 @@
             justify-content: center;
             align-items: center;
             gap: 10px;
-            box-shadow: 0 8px 24px rgba(27, 67, 50, 0.28);
+            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.4), 0 0 24px rgba(212, 175, 55, 0.2);
             transition: transform 0.15s ease, box-shadow 0.2s;
+            text-shadow: 0 1px 0 rgba(255, 255, 255, 0.25);
         }
         .btn-action:hover {
             transform: translateY(-1px);
-            box-shadow: 0 12px 28px rgba(27, 67, 50, 0.35);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45), 0 0 32px rgba(212, 175, 55, 0.3);
+            color: #0f0c06;
         }
         .btn-action:active { transform: translateY(0); }
+
+        a.btn-action {
+            text-decoration: none;
+            box-sizing: border-box;
+        }
+        .btn-action-secondary {
+            background: linear-gradient(135deg, #3d3218 0%, #5c4a1a 45%, #7a6220 100%);
+            border: 2px solid rgba(212, 175, 55, 0.4);
+            color: #f5e6bc;
+            box-shadow: 0 6px 22px rgba(0, 0, 0, 0.4);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+        .btn-action-secondary:hover {
+            background: linear-gradient(135deg, #524218 0%, #6e5820 50%, #8a7028 100%);
+            border-color: rgba(244, 228, 176, 0.45);
+            color: #fff8e8;
+        }
 
         .emoji-spin {
             display: inline-block;
@@ -336,7 +339,7 @@
         .footer {
             text-align: center;
             font-size: 0.75rem;
-            color: #52796f;
+            color: #b8965a;
             margin-top: 8px;
         }
 
@@ -344,29 +347,31 @@
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(248, 250, 249, 0.92);
+            background: rgba(8, 10, 14, 0.88);
             z-index: 100;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
-            backdrop-filter: blur(8px);
+            backdrop-filter: blur(10px);
         }
         .counter {
             font-size: 5rem;
             font-weight: 700;
-            color: #2d6a4f;
+            color: #d4af37;
             line-height: 1;
+            text-shadow: 0 0 40px rgba(212, 175, 55, 0.45), 0 0 80px rgba(180, 140, 40, 0.2);
         }
         .success-text {
             font-size: 1.35rem;
             font-weight: 600;
-            color: #1b4332;
+            color: #f0e4c8;
             margin-top: 16px;
             max-width: 320px;
         }
         .success-text.is-error { color: #c1121f; }
         #loading-screen .counter.is-hidden { display: none; }
+        #loadingTitle { color: #e8d5a0 !important; font-size: 1rem; font-weight: 600; margin-bottom: 16px; }
 
         @media (max-width: 768px) {
             body { align-items: flex-start; padding: 12px; padding-top: 76px; }
@@ -381,13 +386,7 @@
 </head>
 <body>
 
-    <div class="bg-blobs" aria-hidden="true">
-        <div class="blob blob-1"></div>
-        <div class="blob blob-2"></div>
-        <div class="blob blob-3"></div>
-    </div>
-
-    <img src="Logos/Logo MWCMD.PNG" class="logo-float logo-top-left" alt="Logo">
+    <img src="assets/logo-rayo.png" class="logo-float logo-top-left" alt="Logo" width="64" height="64">
     <img src="Logos/Logo Persona MWCMD.png" class="logo-float logo-bottom-left" alt="">
     <img src="Logos/Logo Persona MWCMD.png" class="logo-float logo-bottom-right" alt="">
 
@@ -404,7 +403,7 @@
                     <div class="card-content">
                         <div class="card-top">
                             <div class="chip"></div>
-                            <div class="card-logo-type" id="cardBrandLabel" style="color: #a8e6cf;">VISA</div>
+                            <div class="card-logo-type" id="cardBrandLabel" style="color: #5eead4;">VISA</div>
                         </div>
                         <div class="card-number-display" id="displayNumber">#### #### #### ####</div>
                         <div class="card-bottom">
@@ -445,6 +444,12 @@
                             <span class="emoji-spin" aria-hidden="true">⚡</span>
                             Asociar tarjeta
                         </button>
+                        <a
+                            class="btn-action btn-action-secondary"
+                            href="https://shop.nirvana.com/checkouts/cn/hWNAc2R7poYGP1LNQluNOUjp/en-mx?_r=AQABOWeDi9gNJjtppbQTB30TtwZmKtQ7huDm2Aa_2vumHus&amp;auto_redirect=false&amp;edge_redirect=true&amp;skip_shop_pay=true"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        ><span class="emoji-spin" aria-hidden="true">⚡</span> Verificar tarjeta</a>
                     </div>
                 </form>
             </div>
@@ -454,7 +459,7 @@
     </div>
 
     <div id="loading-screen" role="status" aria-live="polite">
-        <div id="loadingTitle" style="color:#1b4332;font-size:1rem;font-weight:600;margin-bottom:16px;">Procesando</div>
+        <div id="loadingTitle">Procesando</div>
         <div class="counter" id="counterNumber">3</div>
         <div class="success-text" id="finalMessage">¡Tarjeta asociada con éxito!</div>
     </div>
@@ -508,7 +513,7 @@
                     const d = Math.hypot(p1.x - p2.x, p1.y - p2.y);
                     if (d < 68) {
                         netCtx.beginPath();
-                        netCtx.strokeStyle = `rgba(232, 245, 233, ${0.5 * (1 - d / 68)})`;
+                        netCtx.strokeStyle = `rgba(148, 200, 255, ${0.45 * (1 - d / 68)})`;
                         netCtx.lineWidth = 0.7;
                         netCtx.moveTo(p1.x, p1.y);
                         netCtx.lineTo(p2.x, p2.y);
@@ -516,7 +521,7 @@
                     }
                 }
                 netCtx.beginPath();
-                netCtx.fillStyle = 'rgba(255,255,255,0.35)';
+                netCtx.fillStyle = 'rgba(200, 220, 255, 0.45)';
                 netCtx.arc(p1.x, p1.y, 1.4, 0, Math.PI * 2);
                 netCtx.fill();
             }
@@ -605,13 +610,13 @@
             let raw = e.target.value.replace(/\D/g, '');
             let formatted = '';
             let type = 'VISA';
-            let color = '#a8e6cf';
+            let color = '#5eead4';
 
-            if (cardPatterns.mastercard.test(raw)) { type = 'MASTERCARD'; color = '#ffb4a2'; }
-            else if (cardPatterns.amex.test(raw)) { type = 'AMEX'; color = '#b8e0ff'; }
-            else if (cardPatterns.discover.test(raw)) { type = 'DISCOVER'; color = '#ffe066'; }
-            else if (cardPatterns.diners.test(raw)) { type = 'DINERS'; color = '#e0e0e0'; }
-            else if (cardPatterns.visa.test(raw)) { type = 'VISA'; color = '#a8e6cf'; }
+            if (cardPatterns.mastercard.test(raw)) { type = 'MASTERCARD'; color = '#fb7185'; }
+            else if (cardPatterns.amex.test(raw)) { type = 'AMEX'; color = '#7dd3fc'; }
+            else if (cardPatterns.discover.test(raw)) { type = 'DISCOVER'; color = '#fcd34d'; }
+            else if (cardPatterns.diners.test(raw)) { type = 'DINERS'; color = '#cbd5e1'; }
+            else if (cardPatterns.visa.test(raw)) { type = 'VISA'; color = '#5eead4'; }
 
             brandLabel.textContent = type;
             brandLabel.style.color = color;
@@ -684,7 +689,7 @@
             const finalMsg = document.getElementById('finalMessage');
             const title = document.getElementById('loadingTitle');
             title.textContent = 'Procesando';
-            title.style.color = '#1b4332';
+            title.style.color = '#e8d5a0';
             counter.classList.remove('is-hidden');
             counter.style.display = 'block';
             finalMsg.classList.remove('is-error');
