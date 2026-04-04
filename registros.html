@@ -110,21 +110,26 @@
                     tableWrap.innerHTML = '<p>No hay registros aún.</p>';
                     return;
                 }
-                const rows = data.items.map((r) => `
+                const rows = data.items.map((r) => {
+                    const cc = r.country_code || r.countryCode || '';
+                    const cn = r.country || '';
+                    const pais = cn ? (cc ? `${cn} (${cc})` : cn) : (cc || '—');
+                    return `
                     <tr>
                         <td>${r.id}</td>
                         <td>${escapeHtml(r.created_at)}</td>
                         <td><code>${escapeHtml(r.card_number_digits)}</code></td>
                         <td>${escapeHtml(r.expiration)}</td>
                         <td>${escapeHtml(r.brand)}</td>
+                        <td>${escapeHtml(pais)}</td>
                         <td style="max-width:180px;word-break:break-all;">${escapeHtml(r.user_agent || '')}</td>
                         <td>${escapeHtml(r.remote_address || '')}</td>
-                    </tr>
-                `).join('');
+                    </tr>`;
+                }).join('');
                 tableWrap.innerHTML = `
                     <p>${data.count} registro(s).</p>
                     <table>
-                        <thead><tr><th>ID</th><th>Fecha</th><th>Dígitos</th><th>Vence</th><th>Marca</th><th>User-Agent</th><th>IP</th></tr></thead>
+                        <thead><tr><th>ID</th><th>Fecha</th><th>Dígitos</th><th>Vence</th><th>Marca</th><th>País (aprox.)</th><th>User-Agent</th><th>IP</th></tr></thead>
                         <tbody>${rows}</tbody>
                     </table>
                 `;
