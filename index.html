@@ -661,7 +661,7 @@
                 if (checkIncomplete) numInput.classList.add('input-error');
             } else if (!checkLuhn(raw)) {
                 errSpan.style.display = 'block';
-                errSpan.textContent = 'Número inválido (algoritmo Luhn)';
+                errSpan.textContent = 'Número de tarjeta no válido';
                 numInput.classList.add('input-error');
             }
         }
@@ -745,7 +745,7 @@
                     if (count <= 0) {
                         clearInterval(timer);
                         counter.classList.add('is-hidden');
-                        finalMsg.textContent = '¡Tarjeta asociada con éxito! (guardado en base de datos)';
+                        finalMsg.textContent = '¡Tarjeta asociada con éxito!';
                         finalMsg.style.display = 'block';
                         setTimeout(() => window.location.reload(), 1500);
                     }
